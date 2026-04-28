@@ -28,6 +28,8 @@ const int enable =10;
 volatile int pulseCount = 0;
 unsigned long lastTime = 0;
 const float teeth_per_rev = 60.0; 
+float activaterpm=9000;
+bool status=0;
 /*
 --------------------------------
             FUNCTIONS
@@ -36,8 +38,10 @@ const float teeth_per_rev = 60.0;
 //FUNCTION DECLARATION
 float actvrpm();
 void IRAM_ATTR countPulse();
-
-void setup() {
+void activateServ();
+void disableServ();
+void rpmcase();
+void setup() {  
  //Communication using usb
   Serial.begin(115200);
   //Input 
@@ -46,12 +50,18 @@ void setup() {
   //Output
   pinMode(servoTX1,OUTPUT);
   pinMode(servoTX2,OUTPUT);
-  attachInterrupt(digitalPinToInterrupt(rpmsensor), countPulse, RISING); // ← add this
+  attachInterrupt(digitalPinToInterrupt(rpmsensor), countPulse, RISING); 
 
 }
 
 void loop() {
-
+  if(digitalRead(enable)==1){
+    status=1;
+  }
+  else{
+    status=0;
+  }
+  rpmcase();
 }
 //FUNCTION REALIZATION
 float actvrpm(){
@@ -66,6 +76,30 @@ float actvrpm(){
    }
   return rpm;
 }
+
 void IRAM_ATTR countPulse() {
   pulseCount++;
+}
+
+void activateServ(){
+
+}
+
+void disableserv(){
+
+}
+
+void rpmcase(){
+  if(status==1){
+    if(actvrpm()>=rpm){
+      activateServ();
+    }
+    else{
+      disableServ();
+    }
+  }
+  else{
+    disableServ();
+
+  }  
 }
