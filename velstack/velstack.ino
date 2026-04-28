@@ -33,6 +33,10 @@ const float teeth_per_rev = 60.0;
             FUNCTIONS
 --------------------------------
 */
+//FUNCTION DECLARATION
+float actvrpm();
+void IRAM_ATTR countPulse();
+
 void setup() {
  //Communication using usb
   Serial.begin(115200);
@@ -45,9 +49,6 @@ void setup() {
   attachInterrupt(digitalPinToInterrupt(rpmsensor), countPulse, RISING); // ← add this
 
 }
-//FUNCTION DECLARATION
-float actvrpm();
-void IRAM_ATTR countPulse();
 
 void loop() {
 
